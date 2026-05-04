@@ -128,6 +128,17 @@ Inference scoring uses **`do_sample=False`** where generation is used (captions)
 
 ---
 
+## Course submission: adapter weights on GitHub
+
+For reproducibility and grading, bundle the **trained PEFT adapter** (everything produced under `ADAPTER_DIR`, including `adapter_config.json`, `adapter_model.safetensors`, tokenizer/processor files, and optionally `best_val/` after training) into **`adapter.zip`**.
+
+**Suggested placement:** attach **`adapter.zip`** to a [GitHub Release](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository) on this repository, or commit the adapter folder (keep repo size reasonable). After uploading, add the Release URL or folder path to your report’s **Reproducibility** section so points match this README.
+
+Inference-only rerun: unzip so `ADAPTER_DIR` points at the folder containing `adapter_config.json`, then set **`RUN_TRAINING = False`** and run the notebook.
+
+---
+
 ## Author notes
 
 Detailed inline documentation appears in the **first Markdown cell** of `final_project.ipynb`. This README is the **canonical reproducibility** reference for graders and peers.
+
