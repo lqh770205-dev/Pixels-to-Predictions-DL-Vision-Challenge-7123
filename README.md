@@ -1,15 +1,33 @@
-# Deep-Learning-CS-GY-6953-ECE-GY-7123
 # Pixels to Predictions — DL Vision Challenge (Course Project)
 
 Multimodal multiple-choice QA with **`HuggingFaceTB/SmolVLM-500M-Instruct`**, efficient fine-tuning (**LoRA / DoRA**, trainable parameters **≤ 5M** per competition rules), and **answer scoring via token log-likelihood** (letter + optional choice-text ensemble). Primary artifact: **`final_project.ipynb`**.
+
+**→ To reproduce training from scratch, jump to [Retrain from scratch (step-by-step)](#retrain-from-scratch-step-by-step).**  
+**→ ACL-format report (PDF source):** `report/report_main.tex` (figures: run `python report/generate_figures.py`).
 
 ---
 
 ## Repository layout
 
+```
+Deep-Learning-CS-GY-6953-ECE-GY-7123/
+├── final_project.ipynb      # Single entry point: train + infer → submission.csv
+├── starter_notebook.ipynb
+├── requirements.txt         # Pip deps (install PyTorch separately; see below)
+├── README.md                # This file — canonical reproducibility doc
+├── report/
+│   ├── report_main.tex
+│   ├── generate_figures.py
+│   └── figures/             # Generated PDFs/PNGs for the paper
+├── train.csv, val.csv, test.csv   # Optional local mirror of competition CSVs
+├── sample_submission.csv
+└── images/                  # When running locally: unzip competition images here
+```
+
 | Path | Role |
 |------|------|
 | `final_project.ipynb` | **Main pipeline**: data discovery → LoRA/DoRA training (optional) → inference → `submission.csv` |
+| `requirements.txt` | Python packages for **reproducible training/inference** (pin this file in submissions) |
 | `starter_notebook.ipynb` | Starter / exploration (prompt demo, optional LoRA notes) |
 | `train.csv`, `val.csv`, `test.csv` | Labels / IDs when running **locally** (mirror competition CSVs) |
 | `sample_submission.csv` | Required submission column template |
@@ -24,11 +42,18 @@ On **Kaggle**, competition files usually appear under
 ## Environment & dependencies
 
 - **Python 3.10+** recommended.
-- **PyTorch** with CUDA if using GPU.
-- Install before running the main notebook:
+- **Install PyTorch first** for your platform (CUDA vs CPU): https://pytorch.org/get-started/locally/
+- Then install project dependencies from this repo:
 
 ```bash
-pip install "peft>=0.13.0" transformers accelerate pillow
+cd /path/to/this/repo
+pip install -r requirements.txt
+```
+
+Equivalent one-liner (if you prefer not to use `requirements.txt`):
+
+```bash
+pip install "peft>=0.13.0" transformers accelerate pillow pandas numpy tqdm
 ```
 
 On **Kaggle**, add a cell at the top if needed:
@@ -90,6 +115,23 @@ Inference scoring uses **`do_sample=False`** where generation is used (captions)
 4. Run **all cells** in `final_project.ipynb` top to bottom (**Save & Run All** on Kaggle).
 5. After completion, verify **`adapter_config.json`** exists under **`ADAPTER_DIR`**.
 
+### Retrain from scratch (step-by-step)
+
+Use this checklist to satisfy **reproducible training** grading criteria (environment + data + exact procedure):
+
+| Step | Action |
+|------|--------|
+| 1 | Clone this repository and `cd` into it. |
+| 2 | Create a Python **3.10+** venv/conda env. |
+| 3 | Install **PyTorch** matching your GPU driver from pytorch.org, then `pip install -r requirements.txt`. |
+| 4 | Download competition **CSV + images** from Kaggle; place `train.csv`, `val.csv`, `test.csv` and `images/` so paths match `image_path`, **or** set **`DATA_DIR_OVERRIDE`** to that folder’s absolute path in `final_project.ipynb`. |
+| 5 | In **`CONFIG`**: `RUN_TRAINING = True`, `SEED = 42`, leave defaults unless you are running an ablation. |
+| 6 | Run **every cell** from top to bottom (same order as authored — do not skip). |
+| 7 | Confirm artifacts: **`ADAPTER_DIR/adapter_config.json`**, **`adapter_model.safetensors`**, tokenizer files; optional **`ADAPTER_DIR/best_val/`** if validation improved. |
+| 8 | Optional: zip the adapter folder as **`adapter.zip`** for Release upload (see [Course submission](#course-submission-adapter-weights-on-github)). |
+
+**Expected training behavior:** console prints `Training rows: …`, per-epoch loss, `val ep… accuracy`, and `Saved … adapter`. Hyperparameters are **only** changed via `CONFIG` at the top of the notebook (single source of truth).
+
 ### Inference-only setup (reuse checkpoints without retraining)
 
 1. Train once as above **or** copy a saved adapter folder into **`ADAPTER_DIR`**.
@@ -138,7 +180,15 @@ Inference-only rerun: unzip so `ADAPTER_DIR` points at the folder containing `ad
 
 ---
 
+## Documentation map (report vs repo)
+
+| Topic | Where |
+|-------|--------|
+| Method, splits, ablations, error analysis | `report/report_main.tex` → compiled PDF |
+| Commands to install, train, infer | **This README** (sections above) |
+| Line-by-line hyperparameters | `CONFIG` block in `final_project.ipynb` + Appendix table in PDF |
+| Adapter files for graders | `adapter.zip` on GitHub Release or committed adapter folder |
+
 ## Author notes
 
 Detailed inline documentation appears in the **first Markdown cell** of `final_project.ipynb`. This README is the **canonical reproducibility** reference for graders and peers.
-
