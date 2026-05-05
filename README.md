@@ -1,4 +1,4 @@
-# Pixels to Predictions — DL Vision Challenge (Course Project)
+# Pixels to Predictions — DL Vision Challenge 
 
 Multimodal multiple-choice QA with **`HuggingFaceTB/SmolVLM-500M-Instruct`**, efficient fine-tuning (**LoRA / DoRA**, trainable parameters **≤ 5M** per competition rules), and **answer scoring via token log-likelihood** (letter + optional choice-text ensemble). Primary artifact: **`final_project.ipynb`**.
 
