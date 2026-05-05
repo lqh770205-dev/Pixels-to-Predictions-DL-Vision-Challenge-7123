@@ -17,7 +17,7 @@ For course hand-in, the usual bundle is only:
 | **`final_project.ipynb`** | Main code: training + inference → `submission.csv`. |
 | **`README.md`** | How to install deps, point `ADAPTER_DIR`, and rerun inference (this file). |
 
-That is enough for someone to load your weights and reproduce **`submission.csv`** without your full repo clone.
+
 
 **Nice to include (small, helps graders):** `requirements.txt` — keeps `pip install -r requirements.txt` aligned with what you used (PyTorch still installed separately; see **Environment & dependencies** below).
 
@@ -25,7 +25,6 @@ That is enough for someone to load your weights and reproduce **`submission.csv`
 
 ## Repository layout (full clone — optional extras)
 
-If you keep the whole GitHub project (development + report), the tree looks like this. Nothing below is required in the **minimal** bundle unless your instructor asks for the written report source.
 
 ```
 Deep-Learning-CS-GY-6953-ECE-GY-7123/
